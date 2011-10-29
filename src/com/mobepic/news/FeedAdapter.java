@@ -2,11 +2,13 @@ package com.mobepic.news;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mcsoxford.rss.RSSItem;
 
 import com.github.droidfu.widgets.WebImageView;
 import com.viewpagerindicator.TitleProvider;
 
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 public class FeedAdapter extends BaseAdapter implements TitleProvider {
 	private List<RSSItem> items;
 	private LayoutInflater inflater;
+	private final int MAX_DESCRIPTION_LENGTH = 250;
 	
 	private void log(String msg) {
 		Log.d("FeedAdapter", msg);
@@ -81,8 +84,8 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 
 		void populateFrom(RSSItem item) {
 			log("populateFrom " + item.getTitle());
-			getTitle().setText(item.getTitle());
-			getDescription().setText(item.getDescription().toString());
+			getTitle().setText(item.getTitle().trim());
+			getDescription().setText(getDescription(item));
 			if(item.getThumbnails()!=null && item.getThumbnails().size()>0) {
 				log("thumbnails");
 				WebImageView media = getMedia();
@@ -95,6 +98,16 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 			} else {
 				log("No thumbss");
 			}
+		}
+
+		private CharSequence getDescription(RSSItem item) {
+			// force move from Spanned to normal String
+			String descr = String.valueOf(item.getDescription());
+			if(descr == null) {
+				return "";
+			}
+			//TODO: remove weird [OBJ] characters
+			return StringUtils.abbreviate(descr.trim(), MAX_DESCRIPTION_LENGTH);
 		}
 
 		TextView getTitle() {

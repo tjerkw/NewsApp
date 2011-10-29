@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ViewPagerIndicator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DroidFu"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PullToRefresh"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

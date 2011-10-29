@@ -1,7 +1,12 @@
 package com.mobepic.news;
 
 
+import java.util.Calendar;
+
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mcsoxford.rss.RSSFeed;
+
+import com.markupartist.android.widget.PullToRefreshListView;
 
 import com.mobepic.news.NewsActivity.NewsServiceListener;
 
@@ -15,11 +20,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FeedFragment extends ListFragment implements NewsServiceListener, NewsService.FeedListener {
+public class FeedFragment extends ListFragment implements NewsServiceListener, NewsService.FeedListener, PullToRefreshListView.OnRefreshListener {
 	// the uri to the feed
 	private String uri;
 	private NewsService service;
 	private boolean loaded;
+	private PullToRefreshListView listView;
 	
 	private void log(String msg) {
 		Log.d("FeedFragment", msg);
@@ -45,9 +51,12 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
 			log("onCreateView->load");
     		load(false);
     	}
-    	return super.onCreateView(inflater, container, savedInstanceState);
-    	//View contentView = inflater.inflate(R.layout.feed_fragment, null);
-		//return contentView;
+    	//return super.onCreateView(inflater, container, savedInstanceState);
+    	View contentView = inflater.inflate(R.layout.feed_fragment, null);
+    	// Set a listener to be invoked when the list should be refreshed.
+    	listView = ((PullToRefreshListView) contentView.findViewById(android.R.id.list));
+    	listView.setOnRefreshListener(this);
+		return contentView;
 	}
 	
 	@Override
@@ -87,10 +96,14 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
 		
 		// woohhaa the world brings us news!
 		log("Retrieved news: "+feed);
+		final String lastUpdatedString = DateFormatUtils.ISO_TIME_NO_T_FORMAT.format(System.currentTimeMillis());
 		this.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
 
 				setListAdapter(new FeedAdapter(getLayoutInflater(null), feed.getItems()));
+				
+				listView.onRefreshComplete();
+				listView.setLastUpdated(lastUpdatedString);
 			}
 		});
 	}
@@ -100,11 +113,10 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
 		
 		log("Feed failed " + e);
 		Toast.makeText(this.getActivity(), "Failed loading feed: "+uri, Toast.LENGTH_LONG).show();
+		listView.onRefreshComplete();
 	}
 
-	public void reload() {
-		this.setListAdapter(null);
-		this.setListShown(false); // show progress
+	public void onRefresh() {
 		this.load(true);
 	}
 

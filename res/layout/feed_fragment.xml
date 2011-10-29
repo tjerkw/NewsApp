@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp" >
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListView
+    <com.markupartist.android.widget.PullToRefreshListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#00FF00"
-        android:drawSelectorOnTop="false" />
+        android:layout_weight="1"/>
 
-    <TextView
+    <RelativeLayout
         android:id="@id/android:empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FF0000"
-        android:text="No data" />
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1" />
+        
+    </RelativeLayout>
+    
+    
 
 </LinearLayout>

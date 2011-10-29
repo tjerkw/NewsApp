@@ -20,7 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.MenuItem.OnMenuItemClickListener;
 
-public class NewsActivity extends AbstractNewsActivity implements OnMenuItemClickListener {
+public class NewsActivity extends AbstractNewsActivity {
 	private FeedSource[] sources = {
 		new FeedSource("Algemeen", "http://www.nu.nl/feeds/rss/algemeen.rss"),
 		new FeedSource("Internet", "http://www.nu.nl/feeds/rss/internet.rss"),
@@ -102,14 +102,11 @@ public class NewsActivity extends AbstractNewsActivity implements OnMenuItemClic
 		}
     }
 
+	/*
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
     	
-		MenuItem item = (MenuItem)menu.add("Refresh")
-			.setOnMenuItemClickListener(this)
-		    .setIcon(R.drawable.ic_refresh);
-		
+    	
 		if(item instanceof MenuItemWrapper) {
 			((MenuItemWrapper)item).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		} else if(item instanceof MenuItemImpl) {
@@ -121,17 +118,6 @@ public class NewsActivity extends AbstractNewsActivity implements OnMenuItemClic
 		return true;
 		//return super.onCreateOptionsMenu(menu);
 	}
+	*/
 
-	@Override
-	public boolean onMenuItemClick(android.view.MenuItem item) {
-		// refresh
-		this.reload();
-		return true;
-	}
-
-	private void reload() {
-		for(FeedFragment fragment : feedFragments) {
-			fragment.reload();
-		}
-	}
 }
