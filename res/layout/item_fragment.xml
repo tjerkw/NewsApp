@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+		<RelativeLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+		    android:paddingTop="5dp"
+		    android:paddingBottom="5dp">
+		
+			<com.github.droidfu.widgets.WebImageView
+				android:id="@+id/media"
+				android:layout_width="100dip"
+				android:layout_height="100dip"
+				android:layout_centerVertical="true"
+				android:paddingLeft="8dp"
+				android:visibility="gone"/>
+			<TextView
+				android:id="@+id/title"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:padding="2dp"
+				android:textSize="18sp"
+				android:textColor="#FFF"
+				android:layout_toRightOf="@+id/media">
+			</TextView>
+		</RelativeLayout>
+
+		<TextView
+			android:id="@+id/descr"
+			android:padding="5dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+		</TextView>
+		    
+		<TextView
+			android:id="@+id/content"
+			android:padding="5dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+		</TextView>
+
+    </LinearLayout>
