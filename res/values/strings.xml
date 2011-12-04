@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Zappr</string>
-
+    <string name="app_name">Wadup</string>
+    
+	<string name="last_updated">Last updated: </string>
+	<string name="share">Share</string>
+	<string name="share_chooser_title">Share article with:</string>
+	<string name="share_not_possible">There are no apps installed that can be used for sharing.</string>
+	<string name="open_in_browser">Open in Browser</string>
 </resources>

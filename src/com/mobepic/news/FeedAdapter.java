@@ -106,7 +106,8 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 			if(descr == null) {
 				return "";
 			}
-			//TODO: remove weird [OBJ] characters
+			// remove weird [OBJ] characters: http://www.fileformat.info/info/unicode/char/fffc/index.htm
+			descr = StringUtils.remove(descr, (char)65532);
 			return StringUtils.abbreviate(descr.trim(), MAX_DESCRIPTION_LENGTH);
 		}
 

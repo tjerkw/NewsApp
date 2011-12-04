@@ -1,14 +1,10 @@
 package com.mobepic.news;
 
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.mcsoxford.rss.RSSFeed;
+import android.support.v4.util.LruCache;
 
 public class Cache<K, V> {
-	// softreference creates a cache that will never use too much memory
-	private Map<K, SoftReference<V>> cache = new HashMap<K, SoftReference<V>>();
+	
+	private LruCache<K, V> cache = new LruCache<K, V>(100);
 
 	/**
 	 * Gets a value for a specific key from the cache,
@@ -20,20 +16,14 @@ public class Cache<K, V> {
 	 * @return value
 	 */
 	public V get(K key) {
-		if(cache.get(key)!=null) {
-			// hard reference it, prevents garbage collection
-			V value = cache.get(key).get();
-			return value; // maybe null if softreference was garbage collected
-		} else {
-			return null;
-		}
+		return cache.get(key);
 	}
 
 	public void put(K key, V value) {
-		cache.put(key, new SoftReference<V>(value));
+		cache.put(key, value);
 	}
 
 	public void clear() {
-		cache.clear();
+		cache.evictAll();
 	}
 }

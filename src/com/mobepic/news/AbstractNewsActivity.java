@@ -6,9 +6,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 
-public abstract class AbstractNewsActivity extends FragmentActivity {
+/**
+ * Provides a subclass for any activity that interacts with the NewsService.
+ * 
+ * @author tjerk
+ */
+public abstract class AbstractNewsActivity extends FragmentActivity implements NewsServiceListener {
 	private NewsService service;
 	
 	protected abstract void log(String msg);
@@ -16,15 +20,14 @@ public abstract class AbstractNewsActivity extends FragmentActivity {
 	private ServiceConnection svcConn=new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder binder) {
 			service=((NewsService.LocalBinder)binder).getService();
-			onNewsService(service);
+			onConnected(service);
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
+			onDisconnected(service);
 			service=null;
 		}
 	};
-	
-	protected abstract void onNewsService(NewsService service);
 	
 	protected NewsService getNewsService() {
 		return service;

@@ -3,16 +3,16 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:padding="5dp">
 
 	<com.github.droidfu.widgets.WebImageView
 		android:id="@+id/media"
 		android:layout_width="75dip"
 		android:layout_height="75dip"
 		android:layout_centerVertical="true"
-		android:paddingLeft="8dp"
-		android:visibility="gone"/>
+		android:paddingRight="6dp"
+		android:visibility="gone"
+		android:scaleType="fitXY"/>
 	<TextView
 		android:id="@+id/title"
 		android:layout_width="fill_parent"

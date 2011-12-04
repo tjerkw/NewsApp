@@ -1,14 +1,12 @@
 package com.mobepic.news;
 
 
-import java.util.Calendar;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mcsoxford.rss.RSSFeed;
 
 import com.markupartist.android.widget.PullToRefreshListView;
 
-import com.mobepic.news.NewsActivity.NewsServiceListener;
+import com.mobepic.news.model.FeedSource;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,16 +44,18 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
     	
 		log("onCreateView");
     	uri = getArguments().getString("uri");
+    	//return super.onCreateView(inflater, container, savedInstanceState);
+    	View contentView = inflater.inflate(R.layout.feed_fragment, null, false);
+    	// Set a listener to be invoked when the list should be refreshed.
+    	listView = ((PullToRefreshListView) contentView.findViewById(android.R.id.list));
+    	listView.setOnRefreshListener(this);
+    	
     	if(service != null) {
 
 			log("onCreateView->load");
     		load(false);
     	}
-    	//return super.onCreateView(inflater, container, savedInstanceState);
-    	View contentView = inflater.inflate(R.layout.feed_fragment, null);
-    	// Set a listener to be invoked when the list should be refreshed.
-    	listView = ((PullToRefreshListView) contentView.findViewById(android.R.id.list));
-    	listView.setOnRefreshListener(this);
+    	
 		return contentView;
 	}
 	
@@ -77,6 +77,14 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
 		}
 	}
 	
+	public void onStart() {
+		super.onStart();
+		if(service!=null && uri!=null && !loaded) {
+			log("onStart->load");
+			load(false);
+		}
+	}
+	
 	private synchronized void load(boolean reload) {
 
 		// get this feed!
@@ -88,6 +96,7 @@ public class FeedFragment extends ListFragment implements NewsServiceListener, N
 	@Override
 	public void onDisconnected(NewsService service) {
 		log("onDisconnected from NewsService");
+		Toast.makeText(this.getActivity(), "disconnected", Toast.LENGTH_SHORT).show();
 		this.service = null;
 	}
 

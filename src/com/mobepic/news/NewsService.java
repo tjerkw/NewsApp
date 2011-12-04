@@ -1,8 +1,5 @@
 package com.mobepic.news;
 
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,6 +7,9 @@ import java.util.concurrent.Future;
 
 import org.mcsoxford.rss.RSSFeed;
 import org.mcsoxford.rss.RSSLoader;
+
+import com.basistech.readability.PageReadException;
+import com.basistech.readability.Readability;
 
 import android.app.Service;
 import android.content.Intent;
@@ -66,9 +66,36 @@ public class NewsService extends Service {
 					listener.onFeedRetrieved(feed);
 				} catch (InterruptedException e) {
 					// we got interrupted.. just stop
+					Log.e("NewsService", "Got interrupted during retrieval of feed" + e);
 				} catch (ExecutionException e) {
 					listener.onFail(e);
 				}
+			}
+		});
+	}
+	
+	public void getReadability(final String uri, final ArticleListener listener) {
+
+		log("Submitting getFeed to executor "+uri);
+		executor.submit(new Runnable() {
+			public void run() {
+				
+				Readability r = new Readability();
+				
+				// this call is quite heavy on resources
+				try {
+					r.processDocument(uri);
+					listener.onArticle(r);
+					
+				} catch (PageReadException e) {
+					
+					e.printStackTrace();
+					if(e.getCause()!=null) {
+						e.getCause().printStackTrace();
+					}
+					listener.onFail(e);
+				}
+				
 			}
 		});
 	}
@@ -88,6 +115,11 @@ public class NewsService extends Service {
 	
 	public interface FeedListener {
 		public void onFeedRetrieved(RSSFeed feed);
+		public void onFail(Exception e);
+	}
+	
+	public interface ArticleListener {
+		public void onArticle(Readability article);
 		public void onFail(Exception e);
 	}
 }
