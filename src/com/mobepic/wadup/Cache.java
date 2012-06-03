@@ -1,4 +1,4 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import android.support.v4.util.LruCache;
 

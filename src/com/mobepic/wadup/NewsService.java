@@ -1,15 +1,15 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.mobepic.wadup.retriever.ArticleRetrieveException;
+import com.mobepic.wadup.retriever.ArticleRetriever;
+import com.mobepic.wadup.retriever.ArticleRetrieverFactory;
 import org.mcsoxford.rss.RSSFeed;
 import org.mcsoxford.rss.RSSLoader;
-
-import com.basistech.readability.PageReadException;
-import com.basistech.readability.Readability;
 
 import android.app.Service;
 import android.content.Intent;
@@ -79,7 +79,22 @@ public class NewsService extends Service {
 		log("Submitting getFeed to executor "+uri);
 		executor.submit(new Runnable() {
 			public void run() {
-				
+
+                ArticleRetriever retriever = ArticleRetrieverFactory.getInstance();
+                Article article = null;
+                try {
+                    article = retriever.load(uri);
+                    listener.onArticle(article);
+
+                } catch (ArticleRetrieveException e) {
+                    e.printStackTrace();
+                    e.printStackTrace();
+                    if(e.getCause()!=null) {
+                        e.getCause().printStackTrace();
+                    }
+                    listener.onFail(e);
+                }
+			    /*
 				Readability r = new Readability();
 				
 				// this call is quite heavy on resources
@@ -95,6 +110,7 @@ public class NewsService extends Service {
 					}
 					listener.onFail(e);
 				}
+				*/
 				
 			}
 		});
@@ -119,7 +135,7 @@ public class NewsService extends Service {
 	}
 	
 	public interface ArticleListener {
-		public void onArticle(Readability article);
+		public void onArticle(Article article);
 		public void onFail(Exception e);
 	}
 }

@@ -1,12 +1,12 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.mobepic.news.model.BundlesDatabase;
-import com.mobepic.news.model.FeedBundle;
+import com.mobepic.wadup.model.BundlesDatabase;
+import com.mobepic.wadup.model.FeedBundle;
 
 public class NewsActivity extends AbstractNewsActivity implements ActionBar.OnNavigationListener {
 	private BundlesDatabase db = BundlesDatabase.getInstance();
@@ -34,7 +34,7 @@ public class NewsActivity extends AbstractNewsActivity implements ActionBar.OnNa
         ActionBar bar = this.getSupportActionBar();
         bar.setDisplayUseLogoEnabled(false);
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        ArrayAdapter<FeedBundle> adapter = new ArrayAdapter<FeedBundle>(this, R.layout.abs__simple_spinner_item, db.getBundles());
+        ArrayAdapter<FeedBundle> adapter = new ArrayAdapter<FeedBundle>(this, android.R.layout.simple_spinner_item, db.getBundles());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bar.setListNavigationCallbacks(adapter, this);
         

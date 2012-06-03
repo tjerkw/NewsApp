@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.mobepic.news"
+    xmlns:app="http://schemas.android.com/apk/res/com.mobepic.wadup"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
@@ -9,7 +9,7 @@
 	<android.support.v4.view.ViewPager
 		android:id="@+id/pager"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		android:layout_height="0dip"
         android:layout_weight="1" />
         
     <com.viewpagerindicator.CirclePageIndicator

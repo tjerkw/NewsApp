@@ -1,4 +1,4 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 /**
  * Provides a subclass for any activity that interacts with the NewsService.
  * 
  * @author tjerk
  */
-public abstract class AbstractNewsActivity extends FragmentActivity implements NewsServiceListener {
+public abstract class AbstractNewsActivity extends SherlockFragmentActivity implements NewsServiceListener {
 	private NewsService service;
 	
 	protected abstract void log(String msg);

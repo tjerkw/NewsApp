@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Wadup</string>
+    <string name="app_name">Wadup News</string>
     
 	<string name="last_updated">Last updated: </string>
 	<string name="share">Share</string>

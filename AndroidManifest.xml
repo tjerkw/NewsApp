@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mobepic.news"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.mobepic.wadup"
+    android:versionCode="3"
+    android:versionName="1.0"
+    android:installLocation="auto">
 
     <uses-sdk android:minSdkVersion="8" />
+    
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" >
+    </supports-screens>
 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET"/>
@@ -29,7 +39,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Sherlock">
         </activity>
-        <service android:name="NewsService"></service>
+        <service android:name=".NewsService"></service>
     </application>
 
 </manifest>

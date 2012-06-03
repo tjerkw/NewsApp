@@ -1,4 +1,4 @@
-package com.mobepic.news.model;
+package com.mobepic.wadup.model;
 
 import java.util.ArrayList;
 import java.util.List;

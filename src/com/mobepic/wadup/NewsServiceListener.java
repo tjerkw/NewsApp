@@ -1,4 +1,4 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 interface NewsServiceListener {
 	public void onConnected(NewsService service);

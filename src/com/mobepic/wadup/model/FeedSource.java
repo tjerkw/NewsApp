@@ -1,4 +1,4 @@
-package com.mobepic.news.model;
+package com.mobepic.wadup.model;
 
 public class FeedSource {
 	public String uri;

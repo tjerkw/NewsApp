@@ -1,4 +1,4 @@
-package com.mobepic.news.model;
+package com.mobepic.wadup.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +44,17 @@ public class BundlesDatabase {
 			new FeedSource("Electronics", "http://tweakers.net/feeds/electronics.xml/direct"),
 			new FeedSource("Mobile", "http://tweakers.net/feeds/mobile.xml/direct")
 		));
+		/*
 		bundles.add(new FeedBundle("Weblogs",
 			new FeedSource("Geenstijl", "http://www.geenstijl.nl/index.xml"),
-			new FeedSource("Retecool", "http://retecool.com/feed/"),
-			new FeedSource("Planeet HS", "http://www.planeeths.nl/rss"),
+			//new FeedSource("Retecool", "http://retecool.com/feed/"),
+			//new FeedSource("Planeet HS", "http://www.planeeths.nl/rss"),
 			new FeedSource("VK Mag", "http://www.vkmag.com/magazine/rss_2.0/")
 		));
-		bundles.add(new FeedBundle("Tech NL",
+		*/
+		bundles.add(new FeedBundle("Tech",
 			new FeedSource("Webwereld", "http://feeds.webwereld.nl/webwereld"),
-			new FeedSource("AndroidWorld", "http://feeds.feedburner.com/androidworld/zHTD"),
+			//new FeedSource("AndroidWorld", "http://feeds.feedburner.com/androidworld"), // not a valid rss stream
 			new FeedSource("IPhoneclub", "http://feeds2.feedburner.com/iPhoneclub"),
 			new FeedSource("Engadget", "http://hd.engadget.com/rss.xml")
 		));

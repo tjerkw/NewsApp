@@ -1,4 +1,4 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,18 +7,17 @@ import java.util.Map;
 import org.mcsoxford.rss.RSSFeed;
 import org.mcsoxford.rss.RSSItem;
 
-import com.mobepic.news.NewsService.FeedListener;
+import com.mobepic.wadup.NewsService.FeedListener;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.viewpagerindicator.TitleProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -100,7 +99,7 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
         indicator.setViewPager(pager);
 	}
 	
-	public class ItemsAdapter extends FragmentPagerAdapter implements TitleProvider {
+	public class ItemsAdapter extends FragmentPagerAdapter {
 
 		public ItemsAdapter(FragmentManager fm) {
             super(fm);
@@ -127,11 +126,12 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
         }
 
 		@Override
-		public String getTitle(int position) {
+		public CharSequence getPageTitle(int position) {
 			return items.get(position).getTitle();
 		}
     }
-	
+
+    /*
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
     	
@@ -146,12 +146,13 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
 		return true;
 		//return super.onCreateOptionsMenu(menu);
 	}
+	*/
     
     private RSSItem getCurrentItem() {
-    	if(pager == null || items == null || indicator==null || indicator.getCurrentItem() >= items.size()) {
+    	if(pager == null || items == null || indicator==null || pager.getCurrentItem() >= items.size()) {
     		return null;
     	}
-    	return items.get(indicator.getCurrentItem());
+    	return items.get(pager.getCurrentItem());
     }
 
 	@Override

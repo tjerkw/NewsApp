@@ -1,12 +1,11 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mcsoxford.rss.RSSItem;
 
-import com.github.droidfu.widgets.WebImageView;
-import com.viewpagerindicator.TitleProvider;
+import com.github.ignition.core.widgets.RemoteImageView;
 
 import android.text.Spanned;
 import android.util.Log;
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class FeedAdapter extends BaseAdapter implements TitleProvider {
+public class FeedAdapter extends BaseAdapter {
 	private List<RSSItem> items;
 	private LayoutInflater inflater;
 	private final int MAX_DESCRIPTION_LENGTH = 250;
@@ -46,7 +45,6 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 		return position;
 	}
 
-	@Override
 	public String getTitle(int position) {
 		return items.get(position).getTitle();
 	}
@@ -76,7 +74,7 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 		private TextView title=null;
 		private TextView descr=null;
 		private View row=null;
-		private WebImageView media;
+		private RemoteImageView media;
 
 		RSSItemWrapper(View row) {
 			this.row=row;
@@ -88,7 +86,7 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 			getDescription().setText(getDescription(item));
 			if(item.getThumbnails()!=null && item.getThumbnails().size()>0) {
 				log("thumbnails");
-				WebImageView media = getMedia();
+				RemoteImageView media = getMedia();
 				// calling reset is important in order to make sure an old image from the recycled
 				// view is not displayed while loading
 				media.reset();
@@ -126,9 +124,9 @@ public class FeedAdapter extends BaseAdapter implements TitleProvider {
 			return(descr);
 		}
 		
-		WebImageView getMedia() {
+		RemoteImageView getMedia() {
 			if (media==null) {
-				media=(WebImageView)row.findViewById(R.id.media);
+				media=(RemoteImageView)row.findViewById(R.id.media);
 			}
 
 			return media;

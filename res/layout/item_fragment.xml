@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -8,16 +7,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/fade_in_layout_anim"
         android:orientation="vertical"
-        android:padding="3dp"
-		android:layoutAnimation="@anim/fade_in_layout_anim">
+        android:padding="3dp" >
 
-        <LinearLayout
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content" >
 
-            <com.github.droidfu.widgets.WebImageView
+            <com.github.ignition.core.widgets.RemoteImageView
                 android:id="@+id/media"
                 android:layout_width="100dip"
                 android:layout_height="100dip"
@@ -29,50 +28,70 @@
                 android:id="@+id/title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/media"
                 android:padding="2dp"
                 android:textColor="#FFF"
                 android:textSize="20sp" >
             </TextView>
-        </LinearLayout>
-        
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textColor="#FFF"
-            android:textSize="9sp" >
-        </TextView>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/title"
+                android:layout_below="@+id/title"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#CCC"
+                android:textSize="12sp" >
+            </TextView>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/descr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:padding="5dp">
+            android:padding="5dp"
+            android:textSize="16dip" >
         </TextView>
 
         <TextView
             android:id="@+id/content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:padding="5dp">
+            android:linksClickable="true"
+            android:padding="5dp"
+            android:textSize="16dip" >
         </TextView>
-        
+
+	    <TextView
+			    android:id="@+id/error"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:padding="5dp"
+			    android:textSize="16dip"
+			    android:color="#FF0000"
+			    android:visibility="gone">
+	    </TextView>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-			<ProgressBar
-            	android:id="@+id/spinner"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_alignParentTop="true"
-			    android:layout_centerHorizontal="true"
-			    android:indeterminate="true"/>
-
+            <ProgressBar
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true" />
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/open_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/open_in_browser" />
     </LinearLayout>
 
 </ScrollView>

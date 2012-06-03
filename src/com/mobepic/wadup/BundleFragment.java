@@ -1,4 +1,4 @@
-package com.mobepic.news;
+package com.mobepic.wadup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 
-import com.mobepic.news.model.BundlesDatabase;
-import com.mobepic.news.model.FeedBundle;
+import com.mobepic.wadup.model.BundlesDatabase;
+import com.mobepic.wadup.model.FeedBundle;
 import com.viewpagerindicator.TitlePageIndicator;
-import com.viewpagerindicator.TitleProvider;
 
 public class BundleFragment implements NewsServiceListener {
 	private NewsService service;
@@ -31,20 +30,20 @@ public class BundleFragment implements NewsServiceListener {
 	private void log(String msg) {
 		Log.d("BundleFragment", msg);
 	}
-	
-    BundleFragment(FragmentActivity context, int bundleIndex) {
+
+	BundleFragment(FragmentActivity context, int bundleIndex) {
 		bundle = db.getBundles().get(bundleIndex);
 
-    	titleIndicator = (TitlePageIndicator)context.findViewById(R.id.titles);
-    	pager = (ViewPager)context.findViewById(R.id.pager);
+		titleIndicator = (TitlePageIndicator) context.findViewById(R.id.titles);
+		pager = (ViewPager) context.findViewById(R.id.pager);
 
-        // init adapter
-        feedsAdapter = new FeedsAdapter(bundle, context.getSupportFragmentManager());
-        pager.setAdapter(feedsAdapter);
-        
-        titleIndicator.setViewPager(pager);
+		// init adapter
+		feedsAdapter = new FeedsAdapter(bundle, context.getSupportFragmentManager());
+		pager.setAdapter(feedsAdapter);
+
+		titleIndicator.setViewPager(pager);
 	}
-    
+
 	@Override
 	public void onConnected(NewsService service) {
 		this.service = service;
@@ -61,7 +60,7 @@ public class BundleFragment implements NewsServiceListener {
 		this.service = null;
 	}
 
-	public class FeedsAdapter extends FragmentPagerAdapter implements TitleProvider {
+	public class FeedsAdapter extends FragmentPagerAdapter {
         private FeedBundle bundle;
 
 		public FeedsAdapter(FeedBundle bundle, FragmentManager fm) {
@@ -100,7 +99,7 @@ public class BundleFragment implements NewsServiceListener {
         }
 
 		@Override
-		public String getTitle(int position) {
+		public CharSequence getPageTitle(int position) {
 			return bundle.getFeeds().get(position).getTitle();
 		}
     }
