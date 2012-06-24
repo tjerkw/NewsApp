@@ -2,6 +2,7 @@ package com.mobepic.wadup;
 
 import java.util.List;
 
+import android.widget.Button;
 import org.apache.commons.lang3.StringUtils;
 import org.mcsoxford.rss.RSSItem;
 
@@ -18,18 +19,20 @@ import android.widget.TextView;
 public class FeedAdapter extends BaseAdapter {
 	private List<RSSItem> items;
 	private LayoutInflater inflater;
+	private ItemActionListener listener;
 	private final int MAX_DESCRIPTION_LENGTH = 250;
-	
+
 	private void log(String msg) {
 		Log.d("FeedAdapter", msg);
 	}
-	
-	FeedAdapter(LayoutInflater inflater, List<RSSItem> items) {
+
+	FeedAdapter(LayoutInflater inflater, List<RSSItem> items, ItemActionListener listener) {
+		this.listener = listener;
 		this.inflater = inflater;
 		this.items = items;
 		log("FeedAdapter with n items: "+items.size());
 	}
-	
+
 	@Override
 	public int getCount() {
 		return items.size();
@@ -54,7 +57,7 @@ public class FeedAdapter extends BaseAdapter {
 		View row=convertView;
 		RSSItemWrapper wrapper=null;
 
-		if (row==null) {													
+		if (row==null) {
 			row=inflater.inflate(R.layout.feed_item_row, parent, false);
 			wrapper=new RSSItemWrapper(row);
 			row.setTag(wrapper);
@@ -64,7 +67,7 @@ public class FeedAdapter extends BaseAdapter {
 			wrapper=(RSSItemWrapper)row.getTag();
 		}
 
-		wrapper.populateFrom((RSSItem)this.getItem(position));
+		wrapper.populateFrom((RSSItem)this.getItem(position), position);
 
 		return(row);
 	}
@@ -75,12 +78,36 @@ public class FeedAdapter extends BaseAdapter {
 		private TextView descr=null;
 		private View row=null;
 		private RemoteImageView media;
+		private int position;
+		private RSSItem item;
 
 		RSSItemWrapper(View row) {
 			this.row=row;
+			row.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					listener.onItemClick(item, position);
+				}
+			});
+			Button shareButton = (Button)this.row.findViewById(R.id.share);
+			shareButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					listener.onShare(item);
+				}
+			});
+			Button openInBrowserButton = (Button)this.row.findViewById(R.id.open_in_browser);
+			openInBrowserButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					listener.onOpenInBrowser(item);
+				}
+			});
 		}
 
-		void populateFrom(RSSItem item) {
+		void populateFrom(RSSItem item, int position) {
+			this.item = item;
+			this.position = position;
 			log("populateFrom " + item.getTitle());
 			getTitle().setText(item.getTitle().trim());
 			getDescription().setText(getDescription(item));
@@ -123,7 +150,7 @@ public class FeedAdapter extends BaseAdapter {
 
 			return(descr);
 		}
-		
+
 		RemoteImageView getMedia() {
 			if (media==null) {
 				media=(RemoteImageView)row.findViewById(R.id.media);
@@ -133,4 +160,10 @@ public class FeedAdapter extends BaseAdapter {
 		}
 	}
 
+
+	interface ItemActionListener {
+		void onItemClick(RSSItem item, int position);
+		void onShare(RSSItem item);
+		void onOpenInBrowser(RSSItem item);
+	}
 }

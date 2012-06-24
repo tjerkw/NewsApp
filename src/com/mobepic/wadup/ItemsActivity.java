@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.support.v4.view.MenuItemCompat;
 import org.mcsoxford.rss.RSSFeed;
 import org.mcsoxford.rss.RSSItem;
 
@@ -24,7 +25,9 @@ import android.util.Log;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
 
-public class ItemsActivity extends AbstractNewsActivity implements FeedListener, OnMenuItemClickListener {
+public class ItemsActivity extends AbstractNewsActivity
+	implements FeedListener, com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener
+{
 	private String uri;
 	private RSSFeed feed;
 	private ViewPager pager;
@@ -33,7 +36,7 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
 	private int initialPosition;
 	private CirclePageIndicator indicator;
 	protected Map<Integer, ItemFragment> itemFragments = new HashMap<Integer, ItemFragment>(10);
-	
+
 	@Override
 	protected void log(String msg) {
 		Log.d("ItemsActivity", msg);
@@ -47,7 +50,7 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
 			fragment.onConnected(service);
 		}
 	}
-	
+
 	@Override
 	public void onDisconnected(NewsService service) {
 		service.getFeed(uri, this, false);
@@ -56,7 +59,7 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
 			fragment.onDisconnected(service);
 		}
 	}
-	
+
 	@Override
 	public void onFeedRetrieved(RSSFeed feed) {
 		log("onFeedRetrieved");
@@ -71,120 +74,110 @@ public class ItemsActivity extends AbstractNewsActivity implements FeedListener,
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        Intent intent = this.getIntent();
-        Bundle params = intent.getExtras();
-        if(params == null) {
-        	throw new IllegalArgumentException("This activity requires params");
-        }
+		super.onCreate(savedInstanceState);
+
+		Intent intent = this.getIntent();
+		Bundle params = intent.getExtras();
+		if(params == null) {
+			throw new IllegalArgumentException("This activity requires params");
+		}
 		uri = params.getString("uri");
 		initialPosition = params.getInt("position");
-        
-        //requestWindowFeature(Window.FEATURE_ACTION_BAR_ITEM_TEXT);
-        setContentView(R.layout.items_activity);
-        
-        ActionBar bar = this.getSupportActionBar();
-        bar.setDisplayUseLogoEnabled(false);
-        bar.setDisplayShowHomeEnabled(true);
-        bar.setDisplayHomeAsUpEnabled(true);
-        //bar.hide()
-        
-        pager = (ViewPager)this.findViewById(R.id.pager);
-        adapter = new ItemsAdapter(this.getSupportFragmentManager());
-        pager.setAdapter(adapter);
-        
-        //Bind the indicator to the adapter
-        indicator = (CirclePageIndicator)findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
+
+		//requestWindowFeature(Window.FEATURE_ACTION_BAR_ITEM_TEXT);
+		setContentView(R.layout.items_activity);
+
+		ActionBar bar = this.getSupportActionBar();
+		bar.setDisplayUseLogoEnabled(false);
+		bar.setDisplayShowHomeEnabled(true);
+		bar.setDisplayHomeAsUpEnabled(true);
+		//bar.hide()
+
+		pager = (ViewPager)this.findViewById(R.id.pager);
+		adapter = new ItemsAdapter(this.getSupportFragmentManager());
+		pager.setAdapter(adapter);
+
+		//Bind the indicator to the adapter
+		indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+		indicator.setViewPager(pager);
 	}
-	
+
 	public class ItemsAdapter extends FragmentPagerAdapter {
 
 		public ItemsAdapter(FragmentManager fm) {
-            super(fm);
-        }
-        
-        @Override
-        public int getCount() {
-            return items==null ? 0 : items.size();
-        }
+			super(fm);
+		}
 
-        @Override
-        public Fragment getItem(int position) {
-        	
-        	log("ItemsAdapter.getItem "+position);
-        	ItemFragment fragment = itemFragments.get(position);
-            if(fragment==null) {
-            	fragment = ItemFragment.newInstance(uri, position);
-            	itemFragments.put(position, fragment);
-            	if(getNewsService()!=null) {
-            		fragment.onConnected(getNewsService());
-            	}
-            }
-            return fragment;
-        }
+		@Override
+		public int getCount() {
+			return items==null ? 0 : items.size();
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+
+			log("ItemsAdapter.getItem "+position);
+			ItemFragment fragment = itemFragments.get(position);
+			if(fragment==null) {
+				fragment = ItemFragment.newInstance(uri, position);
+				itemFragments.put(position, fragment);
+				if(getNewsService()!=null) {
+					fragment.onConnected(getNewsService());
+				}
+			}
+			return fragment;
+		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			return items.get(position).getTitle();
 		}
-    }
+	}
 
-    /*
-    @Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-    	
-    	((android.support.v4.view.MenuItem)menu.add(R.string.share)
-    		.setIcon(R.drawable.ic_title_share_default)
-    		.setOnMenuItemClickListener(this))
-    		.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-    	menu.add(R.string.open_in_browser)
-        		.setOnMenuItemClickListener(this);
-    	
+		/*
+		((MenuItemCompat)menu.add(R.string.share)
+			.setIcon(R.drawable.ic_menu_share)
+			.setOnMenuItemClickListener(this);
+		*/
+
+		menu.add(R.string.open_in_browser)
+				.setOnMenuItemClickListener(this);
+
 		return true;
 		//return super.onCreateOptionsMenu(menu);
 	}
-	*/
-    
-    private RSSItem getCurrentItem() {
-    	if(pager == null || items == null || indicator==null || pager.getCurrentItem() >= items.size()) {
-    		return null;
-    	}
-    	return items.get(pager.getCurrentItem());
-    }
+
+	private RSSItem getCurrentItem() {
+		if(pager == null || items == null || indicator==null || pager.getCurrentItem() >= items.size()) {
+			return null;
+		}
+		return items.get(pager.getCurrentItem());
+	}
+
+	public boolean onMenuItemClick(android.view.MenuItem item) {
+		return onItemClick(item.getItemId());
+	}
 
 	@Override
-	public boolean onMenuItemClick(android.view.MenuItem menuItem) {
-		
+	public boolean onMenuItemClick(MenuItem item) {
+		return onItemClick(item.getItemId());
+	}
+
+	private boolean onItemClick(int itemId) {
+
 		RSSItem item = getCurrentItem();
 		if(item == null) {
 			return false; // no item visible
 		}
-		
-		if(menuItem.getItemId() == 0) {
 
-			// share article
-			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-			shareIntent.setType("text/plain");
-			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, item.getTitle());
-			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, item.getLink() + "\n\n" + item.getDescription());
-	
-			try {
-		        
-				startActivity(Intent.createChooser(shareIntent, this.getText(R.string.share_chooser_title)));
-				
-			} catch (android.content.ActivityNotFoundException ex) {
-		        Toast.makeText(this, R.string.share_not_possible, Toast.LENGTH_SHORT).show();
-		    }
+		if(itemId == 0) {
+
+			Actions.share(this, item);
 		} else {
-			Intent i = new Intent(); 
-
-			i.setAction(Intent.ACTION_VIEW); 
-			i.addCategory(Intent.CATEGORY_BROWSABLE); 
-			i.setData(item.getLink()); 
-			startActivity(i); 
+			Actions.openInBrowser(this, item);
 		}
 		return true;
 	}
