@@ -2,4 +2,4 @@
 
 <layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
         android:animation="@anim/drop_in_anim" />
-	<!-- android:order one of  forward, random, reverse -->
+    <!-- android:order one of  forward, random, reverse -->

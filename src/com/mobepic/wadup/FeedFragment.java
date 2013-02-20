@@ -28,162 +28,162 @@ import static com.mobepic.wadup.R.*;
  * Clicking on it brings you to the ItemFragment
  */
 public class FeedFragment extends ListFragment implements NewsServiceListener,
-		NewsService.FeedListener, PullToRefreshListView.OnRefreshListener, FeedAdapter.ItemActionListener {
-	// the uri to the feed
-	private String uri;
-	private NewsService service;
-	private boolean loaded;
-	private PullToRefreshListView listView;
-	private FeedAdapter adapter;
-	private TextView errorText;
+        NewsService.FeedListener, PullToRefreshListView.OnRefreshListener, FeedAdapter.ItemActionListener {
+    // the uri to the feed
+    private String uri;
+    private NewsService service;
+    private boolean loaded;
+    private PullToRefreshListView listView;
+    private FeedAdapter adapter;
+    private TextView errorText;
 
-	private void log(String msg) {
-		Log.d("FeedFragment", msg);
-	}
+    private void log(String msg) {
+        Log.d("FeedFragment", msg);
+    }
 
-	public static FeedFragment newInstance(FeedSource source) {
+    public static FeedFragment newInstance(FeedSource source) {
 
-		FeedFragment f = new FeedFragment();
-		Bundle args = new Bundle();
-		args.putString("uri", source.getUri());
-		f.setArguments(args);
-		return f;
-	}
+        FeedFragment f = new FeedFragment();
+        Bundle args = new Bundle();
+        args.putString("uri", source.getUri());
+        f.setArguments(args);
+        return f;
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
 
-		log("onCreateView");
-		uri = getArguments().getString("uri");
-		// return super.onCreateView(inflater, container, savedInstanceState);
-		View contentView = inflater
-				.inflate(layout.feed_fragment, null, false);
-		// Set a listener to be invoked when the list should be refreshed.
-		listView = ((PullToRefreshListView) contentView
-				.findViewById(id.list));
-		listView.setOnRefreshListener(this);
-		errorText = (TextView) contentView.findViewById(R.id.error);
+        log("onCreateView");
+        uri = getArguments().getString("uri");
+        // return super.onCreateView(inflater, container, savedInstanceState);
+        View contentView = inflater
+                .inflate(layout.feed_fragment, null, false);
+        // Set a listener to be invoked when the list should be refreshed.
+        listView = ((PullToRefreshListView) contentView
+                .findViewById(id.list));
+        listView.setOnRefreshListener(this);
+        errorText = (TextView) contentView.findViewById(R.id.error);
 
-		if (service != null) {
+        if (service != null) {
 
-			log("onCreateView->load");
-			load(false);
-		}
+            log("onCreateView->load");
+            load(false);
+        }
 
-		return contentView;
-	}
+        return contentView;
+    }
 
-	@Override
-	public void onConnected(NewsService service) {
-		this.service = service;
-		if (uri != null && !loaded) {
-			log("onConnected->load");
-			load(false);
-		}
-	}
+    @Override
+    public void onConnected(NewsService service) {
+        this.service = service;
+        if (uri != null && !loaded) {
+            log("onConnected->load");
+            load(false);
+        }
+    }
 
-	public void onStart() {
-		super.onStart();
-		if (service != null && uri != null && !loaded) {
-			log("onStart->load");
-			load(false);
-		}
-	}
+    public void onStart() {
+        super.onStart();
+        if (service != null && uri != null && !loaded) {
+            log("onStart->load");
+            load(false);
+        }
+    }
 
-	private synchronized void load(boolean reload) {
+    private synchronized void load(boolean reload) {
 
-		errorText.setVisibility(View.GONE);
-		// get this feed!
-		log("load: Getting feed from: " + uri);
-		service.getFeed(uri, this, reload);
-		loaded = true;
-	}
+        errorText.setVisibility(View.GONE);
+        // get this feed!
+        log("load: Getting feed from: " + uri);
+        service.getFeed(uri, this, reload);
+        loaded = true;
+    }
 
-	@Override
-	public void onDisconnected(NewsService service) {
-		log("onDisconnected from NewsService");
-		Toast.makeText(this.getActivity(), "disconnected", Toast.LENGTH_SHORT)
-				.show();
-		this.service = null;
-	}
+    @Override
+    public void onDisconnected(NewsService service) {
+        log("onDisconnected from NewsService");
+        Toast.makeText(this.getActivity(), "disconnected", Toast.LENGTH_SHORT)
+                .show();
+        this.service = null;
+    }
 
-	@Override
-	public void onFeedRetrieved(final RSSFeed feed) {
+    @Override
+    public void onFeedRetrieved(final RSSFeed feed) {
 
-		// woohhaa the world brings us news!
-		log("Retrieved news: " + feed);
-		final String lastUpdatedString = DateFormatUtils.ISO_TIME_NO_T_FORMAT
-				.format(System.currentTimeMillis());
-		this.getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-
-
-				errorText.setVisibility(View.GONE);
-				adapter = new FeedAdapter(
-					getLayoutInflater(null),
-					feed.getItems(),
-					FeedFragment.this
-				);
-				setListAdapter(new SlideExpandableListAdapter(
-						adapter,
-						R.id.more,
-						R.id.item_toolbar
-				));
-
-				listView.onRefreshComplete();
-				listView.setReleaseLabel(lastUpdatedString);
-			}
-		});
-	}
-
-	@Override
-	public void onFail(Exception e) {
-
-		log("Feed retrieval failed " + e);
-		Toast.makeText(this.getActivity(), "Failed loading feed: " + uri,
-				Toast.LENGTH_LONG).show();
-		listView.onRefreshComplete();
-		errorText.setText(e.getMessage());
-		errorText.setVisibility(View.VISIBLE);
-	}
-
-	public void onRefresh() {
-		listView.setRefreshingLabel("Loading news", PullToRefreshBase.Mode.BOTH);
-		this.load(true);
-	}
+        // woohhaa the world brings us news!
+        log("Retrieved news: " + feed);
+        final String lastUpdatedString = DateFormatUtils.ISO_TIME_NO_T_FORMAT
+                .format(System.currentTimeMillis());
+        this.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
 
 
-	@Override
-	public void onListItemClick(ListView parent, View v, int position, long id) {
+                errorText.setVisibility(View.GONE);
+                adapter = new FeedAdapter(
+                    getLayoutInflater(null),
+                    feed.getItems(),
+                    FeedFragment.this
+                );
+                setListAdapter(new SlideExpandableListAdapter(
+                        adapter,
+                        R.id.more,
+                        R.id.item_toolbar
+                ));
 
-		if (adapter == null) {
-			return;
-		}
-		RSSItem item = (RSSItem)adapter.getItem(position);
-		if(item == null) {
-			return;
-		}
-		onItemClick(item, position);
-	}
+                listView.onRefreshComplete();
+                listView.setReleaseLabel(lastUpdatedString);
+            }
+        });
+    }
 
-	@Override
-	public void onItemClick(RSSItem item, int position) {
-		// goto the item
-		Intent intent = new Intent(getActivity(), ItemsActivity.class);
-		intent.putExtra("uri", uri);
-		intent.putExtra("position", position);
-		this.startActivity(intent);
-	}
+    @Override
+    public void onFail(Exception e) {
 
-	@Override
-	public void onShare(RSSItem item) {
+        log("Feed retrieval failed " + e);
+        Toast.makeText(this.getActivity(), "Failed loading feed: " + uri,
+                Toast.LENGTH_LONG).show();
+        listView.onRefreshComplete();
+        errorText.setText(e.getMessage());
+        errorText.setVisibility(View.VISIBLE);
+    }
 
-		Actions.share(this.getActivity(), item);
-	}
+    public void onRefresh() {
+        listView.setRefreshingLabel("Loading news", PullToRefreshBase.Mode.BOTH);
+        this.load(true);
+    }
 
-	@Override
-	public void onOpenInBrowser(RSSItem item) {
-		Actions.openInBrowser(this.getActivity(), item);
-	}
+
+    @Override
+    public void onListItemClick(ListView parent, View v, int position, long id) {
+
+        if (adapter == null) {
+            return;
+        }
+        RSSItem item = (RSSItem)adapter.getItem(position);
+        if(item == null) {
+            return;
+        }
+        onItemClick(item, position);
+    }
+
+    @Override
+    public void onItemClick(RSSItem item, int position) {
+        // goto the item
+        Intent intent = new Intent(getActivity(), ItemsActivity.class);
+        intent.putExtra("uri", uri);
+        intent.putExtra("position", position);
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void onShare(RSSItem item) {
+
+        Actions.share(this.getActivity(), item);
+    }
+
+    @Override
+    public void onOpenInBrowser(RSSItem item) {
+        Actions.openInBrowser(this.getActivity(), item);
+    }
 }

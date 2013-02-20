@@ -64,15 +64,15 @@
             android:textSize="16dip" >
         </TextView>
 
-	    <TextView
-			    android:id="@+id/error"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:padding="5dp"
-			    android:textSize="16dip"
-			    android:color="#FF0000"
-			    android:visibility="gone">
-	    </TextView>
+        <TextView
+                android:id="@+id/error"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="16dip"
+                android:color="#FF0000"
+                android:visibility="gone">
+        </TextView>
 
         <RelativeLayout
             android:layout_width="match_parent"

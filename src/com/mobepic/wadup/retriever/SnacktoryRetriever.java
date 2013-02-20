@@ -1,8 +1,8 @@
 package com.mobepic.wadup.retriever;
 
 import android.util.Log;
-import com.google.common.collect.MapMaker;
 import com.mobepic.wadup.Article;
+import de.jetwick.snacktory.Converter;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
 
@@ -23,11 +23,16 @@ public class SnacktoryRetriever implements ArticleRetriever {
     public Article load(String url) throws ArticleRetrieveException {
         Log.d(TAG, "retrieving "+url);
         HtmlFetcher fetcher = new HtmlFetcher();
+        // set cache. e.g. take the map implementation from google collections:
+        //fetcher.setCache(new MapMaker().concurrencyLevel(20).expiration(10, TimeUnit.MINUTES).makeMap());
+        de.jetwick.snacktory.Converter u = new Converter();
+
         final JResult res;
         try {
             boolean resolve = true;
+            Log.d(TAG, "HtmlFetched fetcAndExtract " + url);
             res = fetcher.fetchAndExtract(url, RESOLVE_TIMEOUT, resolve);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Log.e(TAG, "Failed fetching "+url+", due to "+e);
             e.printStackTrace();
             throw new ArticleRetrieveException(e);

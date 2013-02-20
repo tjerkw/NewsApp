@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <resources>
-	<color name="transparent">#00000000</color>
-	<color name="button_pressed">#333333</color>
-	<color name="button_focused">#111111</color>
+    <color name="transparent">#00000000</color>
+    <color name="button_pressed">#333333</color>
+    <color name="button_focused">#111111</color>
 </resources>
