@@ -1,46 +1,91 @@
 package com.mobepic.wadup;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.mobepic.wadup.model.BundlesDatabase;
 import com.mobepic.wadup.model.FeedBundle;
-import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.PageIndicator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BundleFragment implements NewsServiceListener {
+public class BundleFragment extends Fragment implements NewsServiceListener {
     private NewsService service;
 
     private static BundlesDatabase db = BundlesDatabase.getInstance();
     private FeedBundle bundle;
     protected Map<Integer, FeedFragment> feedFragments = new HashMap<Integer, FeedFragment>(10);
 
-    private TitlePageIndicator titleIndicator;
+    private PageIndicator pageIndicator;
     private ViewPager pager;
+    private ViewPager.OnPageChangeListener listener;
     private FeedsAdapter feedsAdapter;
-    private FragmentManager fm;
 
     private void log(String msg) {
         Log.d("BundleFragment", msg);
     }
 
-    BundleFragment(FragmentActivity context, int bundleIndex) {
-        fm = context.getSupportFragmentManager();
+    public static BundleFragment newInstance(FragmentActivity context, int bundleIndex) {
+
+        BundleFragment f = new BundleFragment();
+        Bundle args = new Bundle();
+        args.putInt("bundleIndex", bundleIndex);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        log("onCreateView");
+        int bundleIndex = getArguments().getInt("bundleIndex");
+        // return super.onCreateView(inflater, container, savedInstanceState);
+        View contentView = inflater
+                .inflate(R.layout.bundle_fragment, null, false);
+
         bundle = db.getBundles().get(bundleIndex);
 
-        titleIndicator = (TitlePageIndicator) context.findViewById(R.id.titles);
-        pager = (ViewPager) context.findViewById(R.id.pager);
+        pageIndicator = (PageIndicator) contentView.findViewById(R.id.titles);
+        pager = (ViewPager) contentView.findViewById(R.id.pager);
 
         // init adapter
-        feedsAdapter = new FeedsAdapter(bundle, context.getSupportFragmentManager());
+        feedsAdapter = new FeedsAdapter(
+            bundle,
+            this.getChildFragmentManager()
+        );
         pager.setAdapter(feedsAdapter);
 
-        titleIndicator.setViewPager(pager);
+        pageIndicator.setViewPager(pager);
+        pageIndicator.setOnPageChangeListener(listener);
+
+        return contentView;
+    }
+
+    @Override
+    public void onDestroy() {
+        if(pager!=null) {
+            pager.setOnPageChangeListener(null);
+        }
+
+        listener = null;
+        service = null;
+        super.onDestroy();
+    }
+
+    void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+        this.listener = listener;
+        if(pager!=null) {
+            pager.setOnPageChangeListener(listener);
+        }
     }
 
     @Override
@@ -65,11 +110,6 @@ public class BundleFragment implements NewsServiceListener {
         public FeedsAdapter(FeedBundle bundle, FragmentManager fm) {
             super(fm);
             this.bundle = bundle;
-        }
-
-        public void setBundle(FeedBundle bundle) {
-            this.bundle = bundle;
-            this.notifyDataSetChanged();
         }
 
         // this hack forces updates of the view
@@ -101,28 +141,5 @@ public class BundleFragment implements NewsServiceListener {
         public CharSequence getPageTitle(int position) {
             return bundle.getFeeds().get(position).getTitle();
         }
-    }
-
-    public void setBundleIndex(int index) {
-
-        final Map<Integer, FeedFragment> oldFragments = feedFragments;
-        feedFragments = new HashMap<Integer, FeedFragment>(10);
-        for(FeedFragment fragment : oldFragments.values()) {
-            //pager.removeView(fragment.getView());
-            //pager.removeView(fragment.getListView());
-            fm.beginTransaction().remove(fragment).commit();
-        }
-        feedsAdapter.setBundle(db.getBundles().get(index));
-
-        feedFragments.clear();
-        pager.setCurrentItem(0);
-        pager.setAdapter(feedsAdapter);
-
-        feedsAdapter.setBundle(db.getBundles().get(index));
-        //pager.forceLayout();
-        //pager.removeAllViews();
-
-        // update the titles
-        titleIndicator.notifyDataSetChanged();
     }
 }

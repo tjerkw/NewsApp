@@ -76,7 +76,7 @@ public class FeedAdapter extends BaseAdapter {
         private View row=null;
         private RemoteImageView media;
         private int position;
-        private RSSItem item;0
+        private RSSItem item;
 
         RSSItemWrapper(View row) {
             this.row=row;

@@ -6,7 +6,7 @@
     android:installLocation="auto">
 
     <uses-sdk android:minSdkVersion="8" />
-    
+
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -16,17 +16,17 @@
         android:xlargeScreens="true" >
     </supports-screens>
 
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.INTERNET"/>
-    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Wadup">
         <activity
             android:label="@string/app_name"
             android:name=".NewsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Sherlock">
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,8 +36,7 @@
         <activity
             android:label="@string/app_name"
             android:name=".ItemsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Sherlock">
+            android:configChanges="keyboardHidden|orientation">
         </activity>
         <service android:name=".NewsService"></service>
     </application>

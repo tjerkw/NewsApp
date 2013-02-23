@@ -3,4 +3,19 @@
     <color name="transparent">#00000000</color>
     <color name="button_pressed">#333333</color>
     <color name="button_focused">#111111</color>
+
+    <color name="secondary_begin">#ff00144e</color>
+    <color name="secondary_center">#ff2347aa</color>
+    <color name="secondary_end">#ff203256</color>
+
+    <color name="secondary_menu">#ff59595a</color>
+
+    <color name="secondary_text">#FFFFFF</color>
+
+
+    <color name="titles_line_color">#ff2347aa</color>
+    <color name="titles_selected_color">#000000</color>
+
+    <color name="text_primary">#0a2f3d</color>
+    <color name="text_error">#EE3333</color>
 </resources>

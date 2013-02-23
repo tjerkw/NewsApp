@@ -9,7 +9,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="16dip"
-            android:color="#FF0000"
+            android:color="@color/text_error"
             android:visibility="gone">
     </TextView>
 

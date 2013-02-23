@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textSize="18sp"
-                android:textColor="#FFF"
+                android:textColor="@color/text_primary"
                 android:layout_toRightOf="@+id/media">
         </TextView>
         <TextView
@@ -48,31 +48,40 @@
 
     <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="75dip"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/item_toolbar"
-            android:background="#333333">
+            android:background="@drawable/secondary">
 
         <Button
                 android:id="@+id/view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:text="@string/view"
+                android:textColor="@color/secondary_text"
                 android:drawableTop="@drawable/ic_menu_view" android:layout_weight="0.5"
-                android:background="@drawable/transparent" android:textSize="12dip"/>
+                android:background="@drawable/transparent" android:textSize="12dip"
+                android:padding="@dimen/expandable_padding"/>
 
         <Button
                 android:id="@+id/open_in_browser"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:text="@string/open_in_browser"
+                android:textColor="@color/secondary_text"
                 android:drawableTop="@drawable/ic_menu_set_as" android:layout_weight="0.5"
-                android:background="@drawable/transparent" android:textSize="12dip"/>
+                android:background="@drawable/transparent" android:textSize="12dip"
+                android:padding="@dimen/expandable_padding"/>
 
         <Button
                 android:id="@+id/share"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:text="@string/share"
+                android:textColor="@color/secondary_text"
                 android:drawableTop="@drawable/ic_menu_share" android:layout_weight="0.5"
-                android:background="@drawable/transparent" android:textSize="12dip"/>
+                android:background="@drawable/transparent" android:textSize="12dip"
+                android:padding="@dimen/expandable_padding"/>
 
 
     </LinearLayout>

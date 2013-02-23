@@ -1,3 +1,6 @@
+.settings
+.externalToolBuilders
+
 #IntelliJ IDEA
 .idea
 *.iml
